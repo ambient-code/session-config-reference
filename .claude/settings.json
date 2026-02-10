@@ -4,13 +4,37 @@
       "Read",
       "Glob",
       "Grep",
-      "Bash(markdownlint *)",
-      "Bash(echo *)"
+      "WebSearch",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(find:*)",
+      "Bash(which:*)",
+      "Bash(cat:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(go test:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx tsc --noEmit:*)",
+      "Bash(ruff check:*)",
+      "Bash(ruff format:*)",
+      "Bash(gofmt:*)",
+      "Bash(go vet:*)"
     ],
     "deny": [
-      "Bash(git push --force *)",
-      "Bash(git push -f *)",
-      "Bash(rm -rf /)"
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(rm -rf /:*)",
+      "Bash(chmod 777:*)",
+      "Bash(curl:* | bash)",
+      "Bash(wget:* | bash)"
     ]
   },
   "hooks": {
@@ -20,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'File modified: review before committing'",
+            "command": "echo 'File modified — review before committing'",
             "timeout": 5
           }
         ]
