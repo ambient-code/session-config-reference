@@ -1,26 +1,36 @@
-# Session Config Reference
+# Session Configuration
 
-This repository demonstrates every Claude Code configuration surface.
-Use it as a starting point for your own session-config repos.
+This workspace is configured by the Ambient Code Platform session-config system.
 
-## Conventions
+## General Guidelines
 
-- Write clean, well-documented code
-- Prefer simple solutions over clever ones
-- Follow existing patterns in the codebase
+- Write clean, readable code with meaningful variable names
+- Follow the principle of least surprise
+- Prefer composition over inheritance
+- Keep functions under 50 lines where practical
+- Every public function should have a clear docstring or comment explaining its purpose
+- Handle errors explicitly — never silently swallow exceptions
 
-## Commands
+## Commit Standards
 
-```bash
-# Lint markdown files
-markdownlint **/*.md
+- Use conventional commit format: `type(scope): description`
+- Types: feat, fix, refactor, test, docs, chore, ci, perf
+- Keep commits atomic — one logical change per commit
+- Write commit messages that explain WHY, not just WHAT
 
-# Run a placeholder test suite
-echo "All checks passed"
-```
+## Code Review Priorities
 
-## Project Context
+When reviewing code, prioritize in this order:
 
-This is a reference/template repository. There is no application code — only
-Claude Code configuration files. When working here, focus on keeping the
-config examples accurate, minimal, and well-commented.
+1. Security vulnerabilities (injection, auth bypass, secret exposure)
+2. Correctness (logic errors, edge cases, race conditions)
+3. Performance (unnecessary allocations, N+1 queries, missing indexes)
+4. Maintainability (naming, structure, documentation)
+5. Style (formatting, conventions)
+
+## Working with ACP Workspaces
+
+- Artifacts should be written to the `artifacts/` directory
+- Repository code lives under `repos/`
+- Workflow definitions are in `workflows/`
+- File uploads from the user are in `file-uploads/`

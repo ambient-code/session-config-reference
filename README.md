@@ -1,7 +1,7 @@
-# session-config-reference
+# Session Config Reference
 
-Reference repository demonstrating every Claude Code session configuration
-surface. Click **"Use this template"** to create your own config repo.
+Reference repository demonstrating every Claude Code configuration surface.
+Click **"Use this template"** to create your own config repo.
 
 ## What's Inside
 
@@ -17,8 +17,7 @@ session-config-reference/
 │   │   └── review/SKILL.md            # /review skill — code review
 │   └── agents/
 │       └── code-reviewer.md           # Read-only reviewer subagent
-├── .mcp.json                          # MCP server (memory, zero-config)
-└── .session-config-loaded             # Sentinel for e2e verification
+└── .mcp.json                          # MCP server (memory, zero-config)
 ```
 
 ## Configuration Surfaces
@@ -40,7 +39,8 @@ Controls what Claude can and cannot do:
   is edited)
 
 This example allows read-only tools and linters, denies force-push and
-destructive commands, and prints a reminder after any file modification.
+destructive commands, and includes a PostToolUse hook that fires after file
+modifications.
 
 ### .claude/rules/ — Rules
 
@@ -79,15 +79,9 @@ This example configures the `memory` server
 (`@modelcontextprotocol/server-memory`), which provides a persistent knowledge
 graph — no API keys or infrastructure required.
 
-### .session-config-loaded — Sentinel File
-
-A plain file whose existence can be checked in e2e tests to verify that
-session-config was applied. Not a Claude Code feature — just a convention
-for automated verification.
-
 ## How to Use This Template
 
-1. Click **"Use this template"** → **"Create a new repository"**
+1. Click **"Use this template"** > **"Create a new repository"**
 2. Edit the files to match your project's needs:
    - Update `CLAUDE.md` with your project context and commands
    - Adjust `settings.json` permissions for your workflow
@@ -95,6 +89,68 @@ for automated verification.
    - Create skills for your common tasks
    - Define agents for specialized workflows
 3. Commit and push — Claude Code will pick up the config automatically
+
+## Adding Your Own
+
+### Adding a New Skill
+
+```bash
+mkdir -p .claude/skills/my-skill
+```
+
+Create `.claude/skills/my-skill/SKILL.md`:
+
+```yaml
+---
+name: my-skill
+description: Brief description of what this skill does
+---
+
+# My Skill
+
+Instructions for Claude when this skill is invoked.
+```
+
+### Adding a New Rule
+
+Create `.claude/rules/my-rule.md`:
+
+```yaml
+---
+paths:
+  - "**/*.ext"
+---
+
+# My Rule
+
+Standards that apply to `.ext` files.
+```
+
+### Adding a New Agent
+
+Create `.claude/agents/my-agent.md`:
+
+```yaml
+---
+name: my-agent
+description: What this agent does
+tools: Read, Glob, Grep
+model: sonnet
+---
+
+You are a specialized agent for [task].
+```
+
+## Overlay Behavior
+
+When used as an ACP session-config repo, contents are overlaid into the
+workspace:
+
+- Files are **added** to `.claude/` — they do not replace the entire directory
+- If a workspace repo also has `.claude/` files, the config repo files are
+  copied first, then the workspace repo's files take precedence
+- `CLAUDE.md` at the root level is placed in the workspace root
+- `.mcp.json` is placed in the workspace root
 
 ## Further Reading
 
