@@ -3,6 +3,25 @@
 Reference repository demonstrating every Claude Code configuration surface.
 Click **"Use this template"** to create your own config repo.
 
+## Quickstart
+
+```bash
+# 1. Click "Use this template" on GitHub, or clone directly:
+gh repo create my-org/my-session-config --template ambient-code/session-config-reference --public
+gh repo clone my-org/my-session-config && cd my-session-config
+
+# 2. Edit CLAUDE.md with your project conventions
+$EDITOR CLAUDE.md
+
+# 3. Customize permissions in settings.json
+$EDITOR .claude/settings.json
+
+# 4. Push — ACP sessions using this as a config repo will pick it up automatically
+git add -A && git commit -m "chore: customize session config" && git push
+```
+
+To use in ACP: set this repo URL as the **Config Repo** in your workspace settings.
+
 ## What's Inside
 
 ```
