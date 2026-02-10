@@ -1,0 +1,11 @@
+{
+  "name": "Code Review",
+  "description": "Review repository code for bugs, security issues, and style violations. Produces a structured report grouped by severity.",
+  "systemPrompt": "You are a senior code reviewer. Analyze the repository for bugs, security vulnerabilities, performance issues, and style violations. Group findings by severity (critical, warning, info). Be specific — include file paths and line numbers. If the code is clean, say so.",
+  "startupPrompt": "Review the code in this repository and produce a findings report.",
+  "results": [
+    {
+      "path": "artifacts/code-review/"
+    }
+  ]
+}

@@ -13,10 +13,7 @@ gh repo clone my-org/my-session-config && cd my-session-config
 # 2. Edit CLAUDE.md with your project conventions
 $EDITOR CLAUDE.md
 
-# 3. Customize permissions in settings.json
-$EDITOR .claude/settings.json
-
-# 4. Push — ACP sessions using this as a config repo will pick it up automatically
+# 3. Push — ACP sessions using this as a config repo will pick it up automatically
 git add -A && git commit -m "chore: customize session config" && git push
 ```
 
@@ -29,13 +26,15 @@ session-config-reference/
 ├── README.md                          # This file
 ├── CLAUDE.md                          # Project-level session instructions
 ├── .claude/
-│   ├── settings.json                  # Permissions and hooks
 │   ├── rules/
 │   │   └── security.md                # Global rule (no path filter)
 │   ├── skills/
 │   │   └── review/SKILL.md            # /review skill — code review
 │   └── agents/
 │       └── code-reviewer.md           # Read-only reviewer subagent
+├── .ambient/
+│   └── workflows/
+│       └── code-review.json           # Example workflow definition
 └── .mcp.json                          # MCP server (memory, zero-config)
 ```
 
@@ -47,19 +46,6 @@ session-config-reference/
 project conventions, common commands, and any context Claude should know.
 
 **Location**: project root or `.claude/CLAUDE.md`
-
-### .claude/settings.json — Permissions and Hooks
-
-Controls what Claude can and cannot do:
-
-- **allow**: Tools and commands permitted without asking
-- **deny**: Tools and commands that are always blocked
-- **hooks**: Shell commands that run on lifecycle events (e.g., after a file
-  is edited)
-
-This example allows read-only tools and linters, denies force-push and
-destructive commands, and includes a PostToolUse hook that fires after file
-modifications.
 
 ### .claude/rules/ — Rules
 
@@ -98,15 +84,44 @@ This example configures the `memory` server
 (`@modelcontextprotocol/server-memory`), which provides a persistent knowledge
 graph — no API keys or infrastructure required.
 
+### .ambient/workflows/ — Workflows
+
+Workflow definitions let you package reusable ACP workflows in your config
+repo. Each workflow is a JSON file under `.ambient/workflows/` using the
+standard ACP workflow format:
+
+```json
+{
+  "name": "Workflow Name",
+  "description": "What this workflow does",
+  "systemPrompt": "Instructions for the agent",
+  "startupPrompt": "First message sent to the agent",
+  "results": [
+    { "path": "artifacts/output-dir/" }
+  ]
+}
+```
+
+**Fields**:
+
+- **name** (required): Display name shown in the ACP UI
+- **description** (required): Brief description of the workflow's purpose
+- **systemPrompt** (required): System-level instructions for the agent
+- **startupPrompt** (required): The initial prompt sent when the session starts
+- **results** (optional): Array of output paths where artifacts are written
+
+This example defines a `code-review` workflow that reviews repository code
+and writes findings to `artifacts/code-review/`.
+
 ## How to Use This Template
 
 1. Click **"Use this template"** > **"Create a new repository"**
 2. Edit the files to match your project's needs:
    - Update `CLAUDE.md` with your project context and commands
-   - Adjust `settings.json` permissions for your workflow
    - Add rules for your coding standards
    - Create skills for your common tasks
    - Define agents for specialized workflows
+   - Add workflows under `.ambient/workflows/`
 3. Commit and push — Claude Code will pick up the config automatically
 
 ## Adding Your Own
@@ -143,6 +158,22 @@ paths:
 # My Rule
 
 Standards that apply to `.ext` files.
+```
+
+### Adding a New Workflow
+
+Create `.ambient/workflows/my-workflow.json`:
+
+```json
+{
+  "name": "My Workflow",
+  "description": "What this workflow does",
+  "systemPrompt": "You are an agent that...",
+  "startupPrompt": "Perform the task described above.",
+  "results": [
+    { "path": "artifacts/my-workflow/" }
+  ]
+}
 ```
 
 ### Adding a New Agent
